@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:title="@string/preferences_title">
+    <CheckBoxPreference android:key="mount_on_boot_preference" android:title="@string/mount_on_boot_preference" android:summaryOff="@string/mount_on_boot_preference_off_summary" android:defaultValue="@string/mount_on_boot_preference_default" android:summaryOn="@string/mount_on_boot_preference_on_summary"/>
+
+    
+
+</PreferenceScreen>

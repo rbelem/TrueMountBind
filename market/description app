@@ -1,0 +1,19 @@
+Hi,
+
+Based on the init script explained in this [url="http://forum.xda-developers.com/showthread.php?t=1251896"]thread[/URL], i've developed a application that allows to plug and unplug folders like device disks.
+
+Some devices have a external sdcard and a internal sdcard, and normally the apps are working with the internal sdcard.
+
+With this application you can store your data in external sdcard and map in the desired folder in the internal sdcard (or another).
+Until you desire, the files are available (for read and write) in the two folders (source and target).
+
+The application detects the device boot and automatically mounts the configured mountpoints.
+Also, it detects the device reboot and shutdown events and applies the umount commands.
+Finally, it detects when a UMS connection is established (or finished) and umounts or remounts if needed.
+
+The application requires root (in order to execute mount and umount operations)
+
+I plan to publish a beta in 2-3 days (i'm finishing a few of tests), and I need a lot of testers :)
+
+I attach screenshots of the application...
+
