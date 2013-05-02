@@ -25,7 +25,7 @@ public class FolderSelection extends Activity implements OnClickListener, OnItem
 {
 	private static final String LOG_SUBTITLE = "FolderSelection";
 	
-	private static final String ROOT_DIRECTORY = "/mnt/sdcard";
+	private static final String ROOT_DIRECTORY = "";
 		
 	public static final String START_PATH = "start";
 	public static final String SELECTED_PATH = "result";
