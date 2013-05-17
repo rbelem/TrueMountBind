@@ -9,7 +9,7 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
 public class Constants {
-    public static final String LOG_TITLE = "FoldersPlug";
+    public static final String LOG_TITLE = "TrueMountBind";
     private static final String LOG_SUBTITLE = "Constants";
 
     public static final String MOUNT_ON_BOOT_PREFERENCE_KEY = "mount_on_boot_preference";
