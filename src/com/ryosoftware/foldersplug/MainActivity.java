@@ -96,9 +96,6 @@ public class MainActivity extends Activity {
                 convert_view.setTag(position);
                 convert_view.setOnCreateContextMenuListener(this);
                 ((ImageView) convert_view.findViewById(R.id.state_icon)).setImageResource(mountpoint.getMounted() ? R.drawable.connected : R.drawable.disconnected);
-                ((CheckBox) convert_view.findViewById(R.id.state_checkbox)).setChecked(mountpoint.getEnabled());
-                convert_view.findViewById(R.id.state_checkbox).setOnClickListener(this);
-                convert_view.findViewById(R.id.state_checkbox).setTag(position);
                 ((TextView) convert_view.findViewById(R.id.source)).setText(mountpoint.getSource());
                 ((TextView) convert_view.findViewById(R.id.target)).setText(mountpoint.getTarget());
             }
@@ -256,31 +253,6 @@ public class MainActivity extends Activity {
         return true;
     }
 
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        boolean enable_delete = (iMountPoints.size() > 0);
-        if (enable_delete) {
-            for (int i = 0; i < iMountPoints.size(); i ++) {
-                if (iMountPoints.get(i).getMounted()) {
-                    enable_delete = false;
-                }
-            }
-        }
-        menu.findItem(R.id.delete_mountpoints_menuitem).setEnabled(enable_delete);
-        return true;
-    }
-
-    private class MountPointsDeleteConfirmationCallback implements ButtonClickCallback {
-        Activity iActivity;
-
-        MountPointsDeleteConfirmationCallback(Activity activity) {
-            iActivity = activity;
-        }
-
-        public void onClick() {
-            MainService.removeMountPoints(iActivity);
-        }
-    }
-
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.preferences_menuitem) {
@@ -288,9 +260,6 @@ public class MainActivity extends Activity {
         } else if (id == R.id.insert_mountpoint_menuitem) {
             iEditedMountPoint = MainService.UNKNOWN_MOUNTPOINT_IDENTIFIER;
             startActivityForResult(new Intent(this, MountPointEdition.class), 0);
-        } else if (id == R.id.delete_mountpoints_menuitem) {
-            MountPointsDeleteConfirmationCallback callback = new MountPointsDeleteConfirmationCallback(this);
-            DialogUtilities.showConfirmDialog(this, R.string.are_you_sure, callback, null, 0, null);
         }
         return true;
     }
