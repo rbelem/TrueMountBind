@@ -5,6 +5,7 @@ import com.ryosoftware.objects.DialogUtilities;
 import com.ryosoftware.objects.DialogUtilities.ButtonClickCallback;
 import com.ryosoftware.objects.Utilities;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -18,6 +19,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.File;
+
+
+import ar.com.daidalos.afiledialog.FileChooserDialog;
 
 public class MountPointEdition extends Activity implements OnClickListener {
     private static final String LOG_SUBTITLE = "MountPointEdition";
@@ -65,15 +69,21 @@ public class MountPointEdition extends Activity implements OnClickListener {
     public void onClick(View view) {
         if (view.getId() == iSourceButton.getId()) {
             Utilities.log(Constants.LOG_TITLE, LOG_SUBTITLE, "Set source button clicked");
-            Intent intent = new Intent(this, FolderSelection.class);
-            intent.putExtra(FolderSelection.START_PATH, iSourceText.getText().toString());
-            startActivityForResult(intent, SOURCE_FILE_DIALOG);
+
+            FileChooserDialog dialog = new FileChooserDialog(this);
+            dialog.setFolderMode(true);
+            dialog.addListener(this.onSourceFolderSelectedListener);
+            dialog.show();
+
             Utilities.log(Constants.LOG_TITLE, LOG_SUBTITLE, "Folder selection activity started");
         } else if (view.getId() == iTargetButton.getId()) {
             Utilities.log(Constants.LOG_TITLE, LOG_SUBTITLE, "Set target button clicked");
-            Intent intent = new Intent(this, FolderSelection.class);
-            intent.putExtra(FolderSelection.START_PATH, iTargetText.getText().toString());
-            startActivityForResult(intent, TARGET_FILE_DIALOG);
+
+            FileChooserDialog dialog = new FileChooserDialog(this);
+            dialog.setFolderMode(true);
+            dialog.addListener(this.onTargetFolderSelectedListener);
+            dialog.show();
+
             Utilities.log(Constants.LOG_TITLE, LOG_SUBTITLE, "Folder selection activity started");
         } else if (view.getId() == iAcceptButton.getId()) {
             Utilities.log(Constants.LOG_TITLE, LOG_SUBTITLE, "Accept button clicked");
@@ -219,20 +229,30 @@ public class MountPointEdition extends Activity implements OnClickListener {
         iAcceptButton.setEnabled((iSourceText.getText().length() > 0) && (iTargetText.getText().length() > 0));
     }
 
-    protected void onActivityResult(int request_code, int result_code, Intent intent) {
-        if (result_code == RESULT_OK) {
-            Utilities.log(Constants.LOG_TITLE, LOG_SUBTITLE, "Retrieving mountpoint value");
-            if (request_code == SOURCE_FILE_DIALOG) {
-                iSourceText.setText(intent.getStringExtra(FolderSelection.SELECTED_PATH));
-                String path = intent.getStringExtra(FolderSelection.SELECTED_PATH);
-                if (path.startsWith("/mnt") || path.startsWith("/media") || path.startsWith("/storage")
-                        || path.startsWith(Environment.getExternalStorageDirectory().getPath())) {
-                    iTargetText.setText(intent.getStringExtra(FolderSelection.SELECTED_PATH));
-                }
-            } else if (request_code == TARGET_FILE_DIALOG) {
-                iTargetText.setText(intent.getStringExtra(FolderSelection.SELECTED_PATH));
+    private FileChooserDialog.OnFileSelectedListener onSourceFolderSelectedListener = new FileChooserDialog.OnFileSelectedListener() {
+        public void onFileSelected(Dialog source, File file) {
+            source.hide();
+            String path = file.getPath();
+            iSourceText.setText(path);
+            if (path.startsWith("/mnt") || path.startsWith("/media") || path.startsWith("/storage")
+                    || path.startsWith(Environment.getExternalStorageDirectory().getPath())) {
+                iTargetText.setText(path);
             }
             setAcceptButtonState();
         }
-    }
+        public void onFileSelected(Dialog source, File folder, String name) {
+            source.hide();
+        }
+    };
+
+    private FileChooserDialog.OnFileSelectedListener onTargetFolderSelectedListener = new FileChooserDialog.OnFileSelectedListener() {
+        public void onFileSelected(Dialog source, File file) {
+            source.hide();
+            iTargetText.setText(file.getPath());
+            setAcceptButtonState();
+        }
+        public void onFileSelected(Dialog source, File folder, String name) {
+            source.hide();
+        }
+    };
 }
